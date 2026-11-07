@@ -16,7 +16,7 @@ Criar uma personagem humanoide original que acompanhe o jogador, explore nas pro
 
 ## Importar o add-on
 
-Baixe o artefato MC-Companion-Bedrock-0.1.0.mcaddon do workflow Validate Bedrock Packs ou gere localmente:
+Baixe o artefato MC-Companion-Bedrock-0.2.0.mcaddon do workflow Validate Bedrock Packs ou gere localmente:
 
     python scripts/validate_packs.py
     python scripts/package_mcaddon.py
