@@ -1,22 +1,26 @@
 # Session checkpoint — 2026-11-07
 
 ## Goal
-An original Bedrock companion that can follow the player, roam nearby, defend its owner, collect dropped items, and return collected items. An Android helper app provides an OpenRouter chat overlay.
+An original Bedrock companion that follows the player, roams nearby, defends its owner, collects dropped items, and returns collected items. An Android sidecar provides an OpenRouter chat overlay.
 
 ## Current implementation
-- Behavior Pack entity identifier: `mccompanion:buddy`.
-- Resource Pack includes a custom humanoid geometry and a 64x64 pixel texture.
+- Behavior Pack entity identifier: mccompanion:buddy.
+- Resource Pack includes custom humanoid geometry, 64x64 pixel texture, and movement animations.
 - Entity can be tamed with an apple, bread, cookie, or golden carrot.
-- Tamed behavior uses Bedrock AI goals for owner defense, melee combat, dropped-item pickup, item handoff, following, and nearby wandering.
-- Android helper is a separate app; its foreground service supports a floating chat window. Chat history is persisted locally with AES-GCM using Android Keystore.
-- The Behavior Pack now includes stable Script API dependencies and an in-game owner menu for follow, explore, guard, stay, and collect orders.
+- Native AI groups separate combat, passive defense, following, wandering, and item collection.
+- Native owner interaction exposes a touchscreen action label; the Script API opens an owner-only ActionFormData menu for follow, explore, guard, stay, and collect orders.
+- Guard actively targets hostile mobs nearby. Stay does not proactively seek hostiles but retaliates if the owner or entity is attacked.
+- Item collection is limited to dropped items in the world and handoff to the owner.
+- Android helper is a separate app with an overlay chat, direct OpenRouter request, locally encrypted API key, and locally encrypted last-16-message chat history.
 
 ## Known limitations
-- No direct bridge from the chat model into the entity AI. The app does not inspect the world or control entity movement.
-- Pickup is for dropped items. Autonomous mining, block harvesting, crafting, and full player-like navigation are not implemented in this foundation.
+- No direct bridge from the chat model into entity AI. The app does not inspect the world or control entity movement.
+- No autonomous mining, block harvesting, crafting, full player-like pathfinding, or world-state awareness.
 - A Bedrock entity runs only while its world/chunk is loaded; the Android app cannot keep Minecraft's world simulation alive after the game unloads or closes.
-- The new 0.2.0 script-based order menu has not yet been runtime-tested inside Minecraft on the target phone. Re-test taming, owner-only menu access, each order, combat, and item pickup.
+- The 0.2.0 touchscreen order menu and the updated AI mode transitions have passed JSON/schema-shape and script-syntax checks, but must still be runtime-tested inside Minecraft on the target phone.
+- The API interaction is intentionally limited to empty-hand owner interaction so food and item use are not hijacked by the menu.
 
 ## Validation performed
-- JSON syntax, manifest UUID linkage, geometry identifier, texture reference, and PNG integrity are checked by `scripts/validate_packs.py`.
-- Runtime compatibility, pathfinding quality, tame interaction, inventory pickup, combat target filters, and Android overlay behavior still require device testing.
+- GitHub Actions validates pack JSON, Behavior Pack script module dependencies, entity order groups, owner/empty-hand interaction structure, geometry and texture references, PNG integrity, and JavaScript syntax.
+- GitHub Actions successfully packages the 0.2.0 MCAddon.
+- The Android debug APK build succeeds in GitHub Actions. App overlay, OpenRouter authentication, persistent memory, and real-device behavior should continue to be tested on the target phone.
