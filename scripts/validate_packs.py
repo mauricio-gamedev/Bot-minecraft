@@ -60,15 +60,26 @@ if entity:
     events = entity.get("minecraft:entity", {}).get("events", {})
     wild = groups.get("mccompanion:wild", {})
     core = groups.get("mccompanion:tamed_core", {})
+    combat = groups.get("mccompanion:combat_mode", {})
+    passive_defense = groups.get("mccompanion:passive_defense_mode", {})
     follow = groups.get("mccompanion:follow_mode", {})
     explore = groups.get("mccompanion:explore_mode", {})
     collect = groups.get("mccompanion:collect_mode", {})
     if "minecraft:behavior.random_stroll" not in wild or "minecraft:behavior.random_stroll" not in explore:
         errors.append("Wild and explore modes must provide random_stroll behavior")
+    if "minecraft:is_tamed" not in core:
+        errors.append("Tamed core is missing minecraft:is_tamed")
     for required in ("minecraft:behavior.owner_hurt_by_target", "minecraft:behavior.owner_hurt_target",
-                     "minecraft:behavior.nearest_attackable_target", "minecraft:behavior.melee_attack"):
-        if required not in core:
-            errors.append(f"Tamed core is missing {required}")
+                     "minecraft:behavior.hurt_by_target", "minecraft:behavior.nearest_attackable_target",
+                     "minecraft:behavior.melee_attack"):
+        if required not in combat:
+            errors.append(f"Combat mode is missing {required}")
+    for required in ("minecraft:behavior.owner_hurt_by_target", "minecraft:behavior.owner_hurt_target",
+                     "minecraft:behavior.hurt_by_target", "minecraft:behavior.melee_attack"):
+        if required not in passive_defense:
+            errors.append(f"Stay mode is missing passive-defense behavior {required}")
+    if "minecraft:behavior.nearest_attackable_target" in passive_defense:
+        errors.append("Stay mode should not actively seek nearby hostiles")
     if "minecraft:behavior.follow_owner" not in follow:
         errors.append("Follow mode is missing follow_owner behavior")
     for required in ("minecraft:behavior.pickup_items", "minecraft:behavior.go_and_give_items_to_owner"):
