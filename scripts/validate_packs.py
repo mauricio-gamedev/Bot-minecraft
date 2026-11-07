@@ -89,6 +89,26 @@ if entity:
                        "mccompanion:order_guard", "mccompanion:order_stay", "mccompanion:order_collect"):
         if event_name not in events:
             errors.append(f"Missing companion order event {event_name}")
+    interaction = components.get("minecraft:interact", {}).get("interactions", [])
+    if not interaction:
+        errors.append("Entity needs a native touch interaction to expose the order menu")
+    else:
+        menu = interaction[0]
+        if menu.get("use_item") is not False:
+            errors.append("Order menu interaction must not consume or use a held item")
+        if not menu.get("interact_text"):
+            errors.append("Order menu interaction needs mobile interact_text")
+        tests = menu.get("on_interact", {}).get("filters", {}).get("all_of", [])
+        required_tests = {
+            ("is_owner", "other", True),
+            ("all_slots_empty", "other", "hand"),
+        }
+        found_tests = {
+            (item.get("test"), item.get("subject"), item.get("value"))
+            for item in tests
+        }
+        if not required_tests.issubset(found_tests):
+            errors.append("Order menu must be restricted to the owner with an empty hand")
 
 if client_entity and geometry:
     desc = client_entity.get("minecraft:client_entity", {}).get("description", {})
