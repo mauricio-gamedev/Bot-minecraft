@@ -96,6 +96,14 @@ public class MainActivity extends Activity {
         gap(content, 8);
         content.addView(stop, new LinearLayout.LayoutParams(-1, dp(44)));
 
+        Button clearMemory = button("Apagar memória da conversa");
+        clearMemory.setOnClickListener(v -> {
+            CompanionMemoryStore.clear(this);
+            Toast.makeText(this, "Memória local apagada.", Toast.LENGTH_SHORT).show();
+        });
+        gap(content, 8);
+        content.addView(clearMemory, new LinearLayout.LayoutParams(-1, dp(44)));
+
         Button delete = button("Apagar chave salva");
         delete.setOnClickListener(v -> {
             SecureKeyStore.clear(this);
