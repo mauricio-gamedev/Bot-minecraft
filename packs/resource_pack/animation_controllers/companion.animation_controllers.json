@@ -1,0 +1,26 @@
+{
+  "format_version": "1.10.0",
+  "animation_controllers": {
+    "controller.animation.mccompanion.buddy.movement": {
+      "initial_state": "idle",
+      "states": {
+        "idle": {
+          "animations": ["idle"],
+          "transitions": [
+            {
+              "walk": "query.modified_move_speed > 0.02"
+            }
+          ]
+        },
+        "walk": {
+          "animations": ["walk"],
+          "transitions": [
+            {
+              "idle": "query.modified_move_speed <= 0.02"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
