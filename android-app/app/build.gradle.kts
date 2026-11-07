@@ -7,11 +7,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.github.astromg01.mccompanion"
+        applicationId = "io.github.astromg01.mccompanion.preview"
         minSdk = 26
         targetSdk = 33
         versionCode = 2
-        versionName = "0.2.0"
+        versionName = "0.2.0-preview"
     }
 
     compileOptions {
