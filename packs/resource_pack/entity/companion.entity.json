@@ -1,0 +1,32 @@
+{
+  "format_version": "1.8.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "mccompanion:buddy",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/companion"
+      },
+      "geometry": {
+        "default": "geometry.mccompanion.buddy"
+      },
+      "render_controllers": [
+        "controller.render.default"
+      ],
+      "spawn_egg": {
+        "base_color": "#15252D",
+        "overlay_color": "#35D6C5"
+      },
+      "animations": {
+        "idle": "animation.mccompanion.buddy.idle",
+        "walk": "animation.mccompanion.buddy.walk",
+        "movement": "controller.animation.mccompanion.buddy.movement"
+      },
+      "scripts": {
+        "animate": ["movement"]
+      }
+    }
+  }
+}
