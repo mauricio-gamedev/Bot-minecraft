@@ -33,18 +33,51 @@ if bp_manifest and rp_manifest:
     if dep and dep.get("version") != rp_manifest.get("header", {}).get("version"):
         errors.append("Behavior Pack Resource Pack dependency version mismatch")
 
+if bp_manifest:
+    modules = bp_manifest.get("modules", [])
+    script_module = next((m for m in modules if m.get("type") == "script"), None)
+    if not script_module or script_module.get("entry") != "scripts/main.js":
+        errors.append("Behavior Pack must include the scripts/main.js script module")
+    else:
+        script_path = BP / script_module["entry"]
+        if not script_path.is_file():
+            errors.append("Missing Behavior Pack script entry: scripts/main.js")
+    dependencies = bp_manifest.get("dependencies", [])
+    required_api = {
+        "@minecraft/server": "2.11.0",
+        "@minecraft/server-ui": "2.3.0",
+    }
+    for module_name, version in required_api.items():
+        if not any(d.get("module_name") == module_name and d.get("version") == version for d in dependencies):
+            errors.append(f"Missing stable script dependency {module_name} {version}")
+
 if entity:
     description = entity.get("minecraft:entity", {}).get("description", {})
     if description.get("identifier") != "mccompanion:buddy":
         errors.append("Behavior entity identifier must be mccompanion:buddy")
     components = entity.get("minecraft:entity", {}).get("components", {})
     groups = entity.get("minecraft:entity", {}).get("component_groups", {})
-    if "minecraft:behavior.random_stroll" not in components:
-        errors.append("Entity is missing random_stroll exploration behavior")
-    tamed = groups.get("mccompanion:tamed", {})
-    for required in ("minecraft:behavior.follow_owner", "minecraft:behavior.melee_attack", "minecraft:behavior.pickup_items", "minecraft:behavior.go_and_give_items_to_owner"):
-        if required not in tamed:
-            errors.append(f"Tamed entity is missing {required}")
+    events = entity.get("minecraft:entity", {}).get("events", {})
+    wild = groups.get("mccompanion:wild", {})
+    core = groups.get("mccompanion:tamed_core", {})
+    follow = groups.get("mccompanion:follow_mode", {})
+    explore = groups.get("mccompanion:explore_mode", {})
+    collect = groups.get("mccompanion:collect_mode", {})
+    if "minecraft:behavior.random_stroll" not in wild or "minecraft:behavior.random_stroll" not in explore:
+        errors.append("Wild and explore modes must provide random_stroll behavior")
+    for required in ("minecraft:behavior.owner_hurt_by_target", "minecraft:behavior.owner_hurt_target",
+                     "minecraft:behavior.nearest_attackable_target", "minecraft:behavior.melee_attack"):
+        if required not in core:
+            errors.append(f"Tamed core is missing {required}")
+    if "minecraft:behavior.follow_owner" not in follow:
+        errors.append("Follow mode is missing follow_owner behavior")
+    for required in ("minecraft:behavior.pickup_items", "minecraft:behavior.go_and_give_items_to_owner"):
+        if required not in collect:
+            errors.append(f"Collect mode is missing {required}")
+    for event_name in ("mccompanion:order_follow", "mccompanion:order_explore",
+                       "mccompanion:order_guard", "mccompanion:order_stay", "mccompanion:order_collect"):
+        if event_name not in events:
+            errors.append(f"Missing companion order event {event_name}")
 
 if client_entity and geometry:
     desc = client_entity.get("minecraft:client_entity", {}).get("description", {})
@@ -72,4 +105,4 @@ if errors:
     for error in errors:
         print(f"ERROR: {error}")
     sys.exit(1)
-print("Pack JSON, manifest linkage, entity capabilities, geometry and textures: OK")
+print("Pack JSON, manifest linkage, script modules, companion orders, geometry and textures: OK")
