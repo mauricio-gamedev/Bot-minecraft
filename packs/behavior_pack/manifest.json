@@ -1,0 +1,27 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "MC Companion — Behavior",
+    "description": "Autonomia, combate, exploração e coleta do companheiro.",
+    "uuid": "0ff77ea5-8566-4bc8-b3f6-47a7a0b90b41",
+    "version": [0, 1, 0],
+    "min_engine_version": [1, 26, 0]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "2eac289d-d016-4631-be53-99ce9ee9f877",
+      "version": [0, 1, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "3d6e3242-bd4c-47d9-85f9-922e5a3eb26c",
+      "version": [0, 1, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["mauricio-gamedev"],
+    "license": "All Rights Reserved"
+  }
+}
