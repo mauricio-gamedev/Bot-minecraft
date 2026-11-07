@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="false"
-        android:label="MC Companion AI"
+        android:label="MC Companion AI Preview"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
         <activity
