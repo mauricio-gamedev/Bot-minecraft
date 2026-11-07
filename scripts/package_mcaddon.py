@@ -4,7 +4,7 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "dist/MC-Companion-Bedrock-0.1.0.mcaddon"
+OUT = ROOT / "dist/MC-Companion-Bedrock-0.2.0.mcaddon"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 PACKS = [
     (ROOT / "packs/behavior_pack", "MC-Companion_BP"),
