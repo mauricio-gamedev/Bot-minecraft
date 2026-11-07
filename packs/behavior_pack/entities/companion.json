@@ -28,7 +28,46 @@
         }
       },
       "mccompanion:tamed_core": {
-        "minecraft:is_tamed": {},
+        "minecraft:is_tamed": {}
+      },
+      "mccompanion:follow_mode": {
+        "minecraft:behavior.follow_owner": {
+          "priority": 8,
+          "speed_multiplier": 1.1,
+          "start_distance": 8,
+          "stop_distance": 3,
+          "can_teleport": true,
+          "max_distance": 48,
+          "post_teleport_distance": 3
+        }
+      },
+      "mccompanion:explore_mode": {
+        "minecraft:behavior.random_stroll": {
+          "priority": 8,
+          "speed_multiplier": 1.1
+        }
+      },
+      "mccompanion:guard_mode": {},
+      "mccompanion:stay_mode": {},
+      "mccompanion:collect_mode": {
+        "minecraft:behavior.go_and_give_items_to_owner": {
+          "priority": 6,
+          "run_speed": 1.15,
+          "reach_mob_distance": 3,
+          "throw_sound": "item_thrown"
+        },
+        "minecraft:behavior.pickup_items": {
+          "priority": 7,
+          "can_pickup_any_item": true,
+          "can_pickup_to_hand_or_equipment": false,
+          "pickup_based_on_chance": false,
+          "max_dist": 8,
+          "search_height": 2,
+          "goal_radius": 1.5,
+          "speed_multiplier": 1
+        }
+      },
+      "mccompanion:combat_mode": {
         "minecraft:behavior.owner_hurt_by_target": {
           "priority": 1
         },
@@ -70,41 +109,20 @@
           "track_target": true
         }
       },
-      "mccompanion:follow_mode": {
-        "minecraft:behavior.follow_owner": {
-          "priority": 8,
-          "speed_multiplier": 1.1,
-          "start_distance": 8,
-          "stop_distance": 3,
-          "can_teleport": true,
-          "max_distance": 48,
-          "post_teleport_distance": 3
-        }
-      },
-      "mccompanion:explore_mode": {
-        "minecraft:behavior.random_stroll": {
-          "priority": 8,
-          "speed_multiplier": 1.1
-        }
-      },
-      "mccompanion:guard_mode": {},
-      "mccompanion:stay_mode": {},
-      "mccompanion:collect_mode": {
-        "minecraft:behavior.go_and_give_items_to_owner": {
-          "priority": 6,
-          "run_speed": 1.15,
-          "reach_mob_distance": 3,
-          "throw_sound": "item_thrown"
+      "mccompanion:passive_defense_mode": {
+        "minecraft:behavior.owner_hurt_by_target": {
+          "priority": 1
         },
-        "minecraft:behavior.pickup_items": {
-          "priority": 7,
-          "can_pickup_any_item": true,
-          "can_pickup_to_hand_or_equipment": false,
-          "pickup_based_on_chance": false,
-          "max_dist": 8,
-          "search_height": 2,
-          "goal_radius": 1.5,
-          "speed_multiplier": 1
+        "minecraft:behavior.owner_hurt_target": {
+          "priority": 2
+        },
+        "minecraft:behavior.hurt_by_target": {
+          "priority": 3
+        },
+        "minecraft:behavior.melee_attack": {
+          "priority": 5,
+          "speed_multiplier": 1.25,
+          "track_target": true
         }
       }
     },
@@ -207,6 +225,7 @@
         "add": {
           "component_groups": [
             "mccompanion:tamed_core",
+            "mccompanion:combat_mode",
             "mccompanion:follow_mode",
             "mccompanion:collect_mode"
           ]
@@ -215,6 +234,8 @@
       "mccompanion:order_follow": {
         "remove": {
           "component_groups": [
+            "mccompanion:combat_mode",
+            "mccompanion:passive_defense_mode",
             "mccompanion:follow_mode",
             "mccompanion:explore_mode",
             "mccompanion:guard_mode",
@@ -224,6 +245,7 @@
         },
         "add": {
           "component_groups": [
+            "mccompanion:combat_mode",
             "mccompanion:follow_mode",
             "mccompanion:collect_mode"
           ]
@@ -232,6 +254,8 @@
       "mccompanion:order_explore": {
         "remove": {
           "component_groups": [
+            "mccompanion:combat_mode",
+            "mccompanion:passive_defense_mode",
             "mccompanion:follow_mode",
             "mccompanion:explore_mode",
             "mccompanion:guard_mode",
@@ -241,6 +265,7 @@
         },
         "add": {
           "component_groups": [
+            "mccompanion:combat_mode",
             "mccompanion:explore_mode",
             "mccompanion:collect_mode"
           ]
@@ -249,6 +274,8 @@
       "mccompanion:order_guard": {
         "remove": {
           "component_groups": [
+            "mccompanion:combat_mode",
+            "mccompanion:passive_defense_mode",
             "mccompanion:follow_mode",
             "mccompanion:explore_mode",
             "mccompanion:guard_mode",
@@ -258,6 +285,7 @@
         },
         "add": {
           "component_groups": [
+            "mccompanion:combat_mode",
             "mccompanion:guard_mode"
           ]
         }
@@ -265,6 +293,8 @@
       "mccompanion:order_stay": {
         "remove": {
           "component_groups": [
+            "mccompanion:combat_mode",
+            "mccompanion:passive_defense_mode",
             "mccompanion:follow_mode",
             "mccompanion:explore_mode",
             "mccompanion:guard_mode",
@@ -274,6 +304,7 @@
         },
         "add": {
           "component_groups": [
+            "mccompanion:passive_defense_mode",
             "mccompanion:stay_mode"
           ]
         }
@@ -281,6 +312,8 @@
       "mccompanion:order_collect": {
         "remove": {
           "component_groups": [
+            "mccompanion:combat_mode",
+            "mccompanion:passive_defense_mode",
             "mccompanion:follow_mode",
             "mccompanion:explore_mode",
             "mccompanion:guard_mode",
@@ -290,6 +323,7 @@
         },
         "add": {
           "component_groups": [
+            "mccompanion:combat_mode",
             "mccompanion:explore_mode",
             "mccompanion:collect_mode"
           ]
