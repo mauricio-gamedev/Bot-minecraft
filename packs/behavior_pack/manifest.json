@@ -2,26 +2,63 @@
   "format_version": 2,
   "header": {
     "name": "MC Companion — Behavior",
-    "description": "Autonomia, combate, exploração e coleta do companheiro.",
+    "description": "Autonomia, combate, exploração, coleta e ordens do companheiro.",
     "uuid": "0ff77ea5-8566-4bc8-b3f6-47a7a0b90b41",
-    "version": [0, 1, 0],
-    "min_engine_version": [1, 26, 0]
+    "version": [
+      0,
+      2,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      0
+    ]
   },
   "modules": [
     {
       "type": "data",
       "uuid": "2eac289d-d016-4631-be53-99ce9ee9f877",
-      "version": [0, 1, 0]
+      "version": [
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "e41c8fbe-0dad-46d5-8ee0-0a130c6a4d5d",
+      "version": [
+        0,
+        2,
+        0
+      ],
+      "entry": "scripts/main.js"
     }
   ],
   "dependencies": [
     {
       "uuid": "3d6e3242-bd4c-47d9-85f9-922e5a3eb26c",
-      "version": [0, 1, 0]
+      "version": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.11.0"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "2.3.0"
     }
   ],
   "metadata": {
-    "authors": ["mauricio-gamedev"],
+    "authors": [
+      "mauricio-gamedev"
+    ],
     "license": "All Rights Reserved"
   }
 }
