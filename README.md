@@ -1,25 +1,50 @@
 # Bot Minecraft — MC Companion
 
-Projeto de um companheiro original para Minecraft Bedrock Android, acompanhado por um aplicativo Android auxiliar.
+Companheiro original para **Minecraft Bedrock Android**, acompanhado por um aplicativo Android auxiliar.
 
 ## Objetivo
 
-Criar um personagem próprio dentro do mundo que possa acompanhar o jogador, explorar nas proximidades, defender seu dono e recolher itens. O aplicativo auxiliar oferece conversa com IA via OpenRouter e uma janela flutuante durante o jogo.
+Criar uma personagem humanoide original que acompanhe o jogador, explore nas proximidades, defenda seu dono e recolha itens derrubados. O app auxiliar fornece conversa por IA em uma janela flutuante.
 
-## Arquitetura
+## Componentes
 
-- **Behavior Pack:** lógica nativa da entidade no Bedrock. A autonomia básica deve continuar funcionando sem o aplicativo aberto.
-- **Resource Pack:** aparência, geometria, texturas e identidade visual do personagem.
-- **Android companion app:** interface flutuante e chat com IA. A conexão é feita diretamente do aparelho ao OpenRouter; não há VPS ou servidor intermediário.
+- packs/behavior_pack: autonomia nativa da entidade (seguir, explorar, defender, combater, coletar e devolver itens).
+- packs/resource_pack: geometria, textura pixel art e animações originais.
+- android-app: app Android com janela flutuante e chat direto com OpenRouter.
+- scripts: validação dos pacotes e empacotamento do add-on.
+- docs: arquitetura e checkpoints técnicos.
 
-## Limites técnicos
+## Importar o add-on
 
-O app Android não recebe automaticamente o estado interno do mundo Bedrock e não controla diretamente a entidade. O chat funciona como camada de conversa; a movimentação, exploração, combate e coleta precisam ser implementados no add-on. A entidade só executa sua IA enquanto o mundo estiver carregado.
+Baixe o artefato MC-Companion-Bedrock-0.1.0.mcaddon do workflow Validate Bedrock Packs ou gere localmente:
 
-## Estado
+    python scripts/validate_packs.py
+    python scripts/package_mcaddon.py
 
-Repositório inicializado. O trabalho de implementação ocorre em branches de feature; a branch `main` fica reservada para versões revisadas.
+Abra o arquivo .mcaddon no Minecraft, ative o Behavior Pack e o Resource Pack nas configurações do mundo. Para invocar por comando:
+
+    /summon mccompanion:buddy
+
+Também existe um ovo de invocação. Ofereça maçã, pão, biscoito ou cenoura dourada para domesticar.
+
+## O que já faz
+
+- Explora por perto quando não está seguindo/defendendo.
+- Segue seu dono após domesticação.
+- Reage para defender o dono e ataca monstros (com filtro para não procurar creepers).
+- Recolhe itens derrubados em seu inventário e tenta entregá-los ao dono.
+- Possui 32 pontos de vida e ataque base de 5.
+
+**Limite atual:** a coleta é de itens que já estão no chão. Mineração autônoma, quebrar blocos, crafting e navegação completa como um segundo jogador ainda não estão implementados.
+
+## App Android
+
+O app envia solicitações HTTPS diretamente do telefone para https://openrouter.ai/api/v1/chat/completions, usando openrouter/free. Não usa VPS ou servidor intermediário. Digite uma chave OpenRouter nova diretamente no app; ela é cifrada localmente com AES-GCM e Android Keystore.
+
+O app consegue manter sua própria interface flutuante por um serviço em primeiro plano, mas **não mantém o Minecraft aberto**, não acessa automaticamente o estado do mundo e não comanda a entidade. A autonomia básica fica no Behavior Pack e roda enquanto o mundo/chunk está carregado.
+
+Para compilar o APK de depuração, execute o workflow Build MC Companion AI. O APK é disponibilizado como artefato do GitHub Actions.
 
 ## Segurança
 
-Nunca coloque chaves de API neste repositório. A chave OpenRouter deve ser inserida no próprio aplicativo e protegida localmente no Android Keystore.
+Nunca commit API keys, tokens, keystores ou dados pessoais. Uma chave que tenha sido exposta deve ser revogada e substituída.
