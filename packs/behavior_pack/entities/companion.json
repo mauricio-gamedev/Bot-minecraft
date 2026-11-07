@@ -224,10 +224,16 @@
                     "test": "is_owner",
                     "subject": "other",
                     "value": true
+                  },
+                  {
+                    "test": "all_slots_empty",
+                    "subject": "other",
+                    "value": "hand"
                   }
                 ]
               }
-            }
+            },
+            "cooldown": 0.6
           }
         ]
       }
