@@ -58,7 +58,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((event) => {
   system.runTimeout(() => {
     try {
       const storedOwner = entity.getDynamicProperty(OWNER_PROPERTY);
-      const tameComponent = entity.getComponent("minecraft:is_tamed");
+      const tameComponent = entity.getComponent("minecraft:tameable");
       const componentOwner = tameComponent?.tamedToPlayerId;
       const ownerId = typeof storedOwner === "string" ? storedOwner : componentOwner;
 
