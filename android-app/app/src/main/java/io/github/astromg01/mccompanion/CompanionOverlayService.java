@@ -55,12 +55,17 @@ public class CompanionOverlayService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         createNotificationChannel();
         startForeground(NOTIFICATION_ID, buildNotification());
+        try {
+            history.addAll(CompanionMemoryStore.load(this));
+        } catch (Exception ignored) {
+            history.clear();
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && ACTION_START.equals(intent.getAction())) showBubble();
-        return START_NOT_STICKY;
+        if (intent == null || ACTION_START.equals(intent.getAction())) showBubble();
+        return START_STICKY;
     }
 
     @Override
@@ -189,11 +194,15 @@ public class CompanionOverlayService extends Service {
         header.addView(close, new LinearLayout.LayoutParams(dp(38), dp(36)));
         root.addView(header);
 
-        root.addView(label("OpenRouter · openrouter/free", 11, 0xFFAAB8C0, false));
+        root.addView(label("OpenRouter · openrouter/free · memória local cifrada", 10, 0xFFAAB8C0, false));
         chatScroll = new ScrollView(this);
         conversation = label("Estou aqui com você.\n\nPosso conversar e ajudar com ideias, receitas e planos. Ainda não vejo o mundo do jogo; me conte o que está acontecendo.\n",
                 13, Color.WHITE, false);
         conversation.setPadding(dp(9), dp(10), dp(9), dp(10));
+        for (OpenRouterClient.ChatMessage item : history) {
+            conversation.append(("user".equals(item.role) ? "Você: " : "MC Companion: ")
+                    + item.content + "\\n\\n");
+        }
         chatScroll.addView(conversation);
         LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(-1, 0, 1);
         scrollParams.topMargin = dp(8);
@@ -242,6 +251,9 @@ public class CompanionOverlayService extends Service {
                 history.add(new OpenRouterClient.ChatMessage("user", message));
                 history.add(new OpenRouterClient.ChatMessage("assistant", answer));
                 while (history.size() > 16) history.remove(0);
+                try {
+                    CompanionMemoryStore.save(this, history);
+                } catch (Exception ignored) { }
             } catch (OpenRouterClient.ApiException e) {
                 answer = explainApiError(e.status, e.getMessage());
             } catch (Exception e) {
