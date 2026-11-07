@@ -58,11 +58,11 @@ world.afterEvents.playerInteractWithEntity.subscribe((event) => {
   system.runTimeout(() => {
     try {
       const storedOwner = entity.getDynamicProperty(OWNER_PROPERTY);
-      const tameComponent = entity.getComponent("minecraft:tameable");
-      const componentOwner = tameComponent?.tamedToPlayerId;
-      const ownerId = typeof storedOwner === "string" ? storedOwner : componentOwner;
 
-      if (ownerId !== player.id) return;
+      // The entity's native minecraft:interact filter already restricts this
+      // action to its owner. This property is an additional ownership check
+      // for companions tamed after the script was installed.
+      if (typeof storedOwner === "string" && storedOwner !== player.id) return;
       showOrders(player, entity);
     } catch (error) {
       console.warn("[MC Companion] Menu indisponível: " + error);
