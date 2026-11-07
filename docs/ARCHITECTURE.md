@@ -2,13 +2,14 @@
 
 ## 1. Bedrock Behavior Pack
 
-The custom entity `mccompanion:buddy` owns all autonomous in-world behavior. It uses stable entity components rather than a remote model call for every action:
+The custom entity `mccompanion:buddy` owns all autonomous in-world behavior. It uses stable entity components rather than a remote model call for every action. A stable `@minecraft/server` + `@minecraft/server-ui` script opens an in-game order menu when the owner interacts with the tamed companion:
 
 - Nearby idle roaming via `minecraft:behavior.random_stroll`.
 - Owner-follow behavior after taming.
 - Owner defense and hostile-mob targeting.
 - Melee attack.
 - Dropped-item pickup into the entity inventory and item handoff to its owner.
+- Owner orders: follow, explore nearby, guard the current area, stay, and collect dropped items.
 
 This keeps basic behavior independent from the phone app and from network availability.
 
