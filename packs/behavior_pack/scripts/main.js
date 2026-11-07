@@ -18,7 +18,7 @@ const orders = [
   {
     event: "mccompanion:order_guard",
     title: "Proteger esta área",
-    description: "Ela permanece por aqui e ataca monstros que se aproximarem."
+    description: "Ela guarda este ponto e ataca monstros que entrarem no alcance."
   },
   {
     event: "mccompanion:order_stay",
@@ -32,17 +32,20 @@ const orders = [
   }
 ];
 
-world.afterEvents.entityTamed.subscribe((event) => {
-  const entity = event.entity;
-  const owner = event.tamingEntity;
-  if (entity.typeId !== COMPANION_ID || owner.typeId !== "minecraft:player") return;
+const entityTamedSignal = world.afterEvents.entityTamed;
+if (entityTamedSignal) {
+  entityTamedSignal.subscribe((event) => {
+    const entity = event.entity;
+    const owner = event.tamingEntity;
+    if (entity.typeId !== COMPANION_ID || owner.typeId !== "minecraft:player") return;
 
-  try {
-    entity.setDynamicProperty(OWNER_PROPERTY, owner.id);
-  } catch (error) {
-    console.warn("[MC Companion] Não foi possível registrar o dono: " + error);
-  }
-});
+    try {
+      entity.setDynamicProperty(OWNER_PROPERTY, owner.id);
+    } catch (error) {
+      console.warn("[MC Companion] Não foi possível registrar o dono: " + error);
+    }
+  });
+}
 
 world.afterEvents.playerInteractWithEntity.subscribe((event) => {
   const entity = event.target;
